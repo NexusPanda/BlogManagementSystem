@@ -1,7 +1,6 @@
 package com.Blog.BlogManagementSystem.Controller;
 
 
-import com.Blog.BlogManagementSystem.ModelDTO.CategoryResponse;
 import com.Blog.BlogManagementSystem.ModelDTO.UserDTO;
 import com.Blog.BlogManagementSystem.ModelDTO.UserResponse;
 import com.Blog.BlogManagementSystem.Service.UserServiceImpl;
