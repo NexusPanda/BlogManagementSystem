@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService{
@@ -63,4 +64,63 @@ public class PostServiceImpl implements PostService{
         postRepository.delete(post);
         return modelMapper.map(post, PostDTO.class);
     }
+
+    @Override
+    public PostResponse viewPostByAuthorId(Long authorId) {
+        List<Post> post = postRepository.findByAuthorId(authorId);
+        if(post.isEmpty()){
+            throw new APIException("Author with Id " + authorId + " not found !!!");
+        }
+        List<PostDTO> postDTOS = post.stream()
+                .map(author -> modelMapper.map(author, PostDTO.class)).toList();
+        PostResponse postResponse = new PostResponse();
+        postResponse.setPostDTOList(postDTOS);
+        return postResponse;
+    }
+
+    @Override
+    public PostResponse viewPostByCategoryId(Long categoryId) {
+        List<Post> posts  = postRepository.findByCategoryId(categoryId);
+        if(posts.isEmpty()){
+            throw new APIException("Category Id " + categoryId + " not found !!!");
+        }
+        List<PostDTO> postDTOS = posts.stream()
+                .map(category -> modelMapper.map(category, PostDTO.class)).toList();
+        PostResponse postResponse = new PostResponse();
+        postResponse.setPostDTOList(postDTOS);
+        return postResponse;
+    }
+
+    @Override
+    public PostResponse getAllPublishedPosts() {
+        List<Post> posts = postRepository.findByPublishedTrue();
+        List<PostDTO> dtos = posts.stream()
+                .map(p -> modelMapper.map(p, PostDTO.class)).toList();
+        return new PostResponse(dtos);
+    }
+
+    @Override
+    public PostDTO getPostById(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post","id",postId));
+        return modelMapper.map(post, PostDTO.class);
+    }
+
+    @Override
+    public PostDTO togglePublishStatus(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
+        post.setPublished(!post.isPublished());
+        Post updated = postRepository.save(post);
+        return modelMapper.map(updated, PostDTO.class);
+    }
+
+    @Override
+    public PostResponse viewPostByTagId(Long tagId) {
+        List<Post> posts = postRepository.findByTags_Id(tagId);
+        List<PostDTO> dtos = posts.stream()
+                .map(p -> modelMapper.map(p, PostDTO.class)).toList();
+        return new PostResponse(dtos);
+    }
+
 }

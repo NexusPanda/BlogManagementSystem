@@ -21,7 +21,7 @@ public class PostController {
         return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/public/posts")
+    @PostMapping("/public/author")
     public ResponseEntity<PostDTO> addPost(@RequestBody PostDTO postDTO){
         PostDTO postDTO1 = postService.addPost(postDTO);
         return new ResponseEntity<>(postDTO1, HttpStatus.CREATED);
@@ -38,5 +38,41 @@ public class PostController {
     public ResponseEntity<PostDTO> deletePost(@PathVariable Long postId){
         PostDTO postDTO = postService.deletePost(postId);
         return new ResponseEntity<>(postDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/posts/author/{authorId}")
+    public ResponseEntity<PostResponse> viewAuthorById(@PathVariable Long authorId){
+        PostResponse postResponse = postService.viewPostByAuthorId(authorId);
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/posts/category/{categoryId}")
+    public ResponseEntity<PostResponse> viewPostByCategory(@PathVariable Long categoryId){
+        PostResponse postResponse = postService.viewPostByCategoryId(categoryId);
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/public/posts")
+    public ResponseEntity<PostResponse> getAllPublishedPosts() {
+        PostResponse postResponse = postService.getAllPublishedPosts();
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/public/posts/{postId}")
+    public ResponseEntity<PostDTO> getPostById(@PathVariable Long postId) {
+        PostDTO postDTO = postService.getPostById(postId);
+        return new ResponseEntity<>(postDTO, HttpStatus.OK);
+    }
+
+    @PatchMapping("/author/posts/{postId}/publish")
+    public ResponseEntity<PostDTO> togglePublishStatus(@PathVariable Long postId) {
+        PostDTO postDTO = postService.togglePublishStatus(postId);
+        return new ResponseEntity<>(postDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/public/posts/tag/{tagId}")
+    public ResponseEntity<PostResponse> getPostsByTag(@PathVariable Long tagId) {
+        PostResponse postResponse = postService.viewPostByTagId(tagId);
+        return new ResponseEntity<>(postResponse, HttpStatus.OK);
     }
 }

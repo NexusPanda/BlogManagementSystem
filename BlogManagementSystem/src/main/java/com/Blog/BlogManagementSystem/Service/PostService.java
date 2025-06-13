@@ -11,4 +11,16 @@ public interface PostService {
     PostDTO updatePost(PostDTO postDTO, Long postId);
 
     PostDTO deletePost(Long postId);
+
+    PostResponse viewPostByAuthorId(Long authorId);
+
+    PostResponse viewPostByCategoryId(Long categoryId);
+
+    PostResponse getAllPublishedPosts();
+
+    PostDTO getPostById(Long postId);
+
+    PostDTO togglePublishStatus(Long postId);
+
+    PostResponse viewPostByTagId(Long tagId);
 }
