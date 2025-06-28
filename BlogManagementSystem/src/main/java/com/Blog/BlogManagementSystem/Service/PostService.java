@@ -6,7 +6,7 @@ import com.Blog.BlogManagementSystem.ModelDTO.PostResponse;
 public interface PostService {
     PostResponse viewPost();
 
-    PostDTO addPost(PostDTO postDTO);
+    PostDTO addPost(PostDTO postDTO, String username);
 
     PostDTO updatePost(PostDTO postDTO, Long postId);
 
