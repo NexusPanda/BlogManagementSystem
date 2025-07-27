@@ -1,7 +1,5 @@
 package com.Blog.BlogManagementSystem.Controller;
 
-import com.Blog.BlogManagementSystem.Model.User;
-import com.Blog.BlogManagementSystem.ModelDTO.UserResponse;
 import com.Blog.BlogManagementSystem.Security.Request.LoginRequest;
 import com.Blog.BlogManagementSystem.Security.Request.RegisterRequest;
 import com.Blog.BlogManagementSystem.Service.AuthService;
