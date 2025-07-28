@@ -1,0 +1,25 @@
+Need to create a Folder in src/main/resources and inside that create a file Named application.properties in that file
+add the below configuration.
+
+# App Configuration
+spring.application.name=BlogManagementSystem
+server.port={Your Port}
+
+
+# PostgreSQL Configuration
+spring.datasource.url=jdbc:postgresql://localhost:5432/{Your DB Name}
+spring.datasource.username={DB Username}
+spring.datasource.password={DB Password}
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+
+# JPA / Hibernate Configuration
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+# JWT Configuration
+spring.app.jwtExpiration=86400000
+spring.app.jwtSecretKey={Your Security Key for JWT. Make it as Long to make the key Strong}
+
+# Static Resources Mapping
+spring.web.resources.add-mappings=true
