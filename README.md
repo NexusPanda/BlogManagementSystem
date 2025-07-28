@@ -78,4 +78,3 @@ or
 
 * Do not commit your personal `application.properties` file to the repository.
 * Use environment-specific files (`application-dev.properties`, etc.) for better separation.
-
