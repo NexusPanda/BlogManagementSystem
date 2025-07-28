@@ -5,7 +5,7 @@
 /mavenHomeManager.xml
 
 # Ignore build outputs
-target/
+BlogManagementSystem/target/
 
 # Ignore sensitive configs
 BlogManagementSystem/src/main/resources/application.properties
