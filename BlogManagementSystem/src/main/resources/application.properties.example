@@ -18,7 +18,7 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 
 # JWT Configuration
-spring.app.jwtExpiration=86400000
+spring.app.jwtExpiration=86400000 (One Day valid)
 spring.app.jwtSecretKey={Your Security Key for JWT. Make it as Long to make the key Strong}
 
 # Static Resources Mapping
