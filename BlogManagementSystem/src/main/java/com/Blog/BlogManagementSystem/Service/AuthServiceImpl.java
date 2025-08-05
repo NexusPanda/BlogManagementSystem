@@ -32,6 +32,10 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
+    private RefreshTokenServiceImpl refreshTokenService;
+
+
     @Override
     public String registerUser(RegisterRequest dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {

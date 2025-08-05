@@ -1,11 +1,16 @@
 package com.Blog.BlogManagementSystem.Controller;
 
+import com.Blog.BlogManagementSystem.Model.RefreshToken;
+import com.Blog.BlogManagementSystem.Security.Jwt.JwtUtils;
 import com.Blog.BlogManagementSystem.Security.Request.LoginRequest;
 import com.Blog.BlogManagementSystem.Security.Request.RegisterRequest;
 import com.Blog.BlogManagementSystem.Service.AuthService;
+import com.Blog.BlogManagementSystem.Service.RefreshTokenServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -13,6 +18,12 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private RefreshTokenServiceImpl refreshTokenService;
+
+    @Autowired
+    private JwtUtils jwtService;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerDTO) {
@@ -23,5 +34,13 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginDTO) {
         return new ResponseEntity<>(authService.loginUser(loginDTO), HttpStatus.OK);
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshAccessToken(@CookieValue("refreshToken") String refreshToken) {
+        RefreshToken token = refreshTokenService.validateRefreshToken(refreshToken);
+        String newAccessToken = jwtService.getTokenFromUserName(token.getUser());
+        return ResponseEntity.ok()
+                .body(Map.of("accessToken", newAccessToken));
     }
 }
