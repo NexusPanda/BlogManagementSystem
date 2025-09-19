@@ -1,6 +1,5 @@
 package com.Blog.BlogManagementSystem.Service;
 
-
 import com.Blog.BlogManagementSystem.Model.User;
 import com.Blog.BlogManagementSystem.Security.Request.LoginRequest;
 import com.Blog.BlogManagementSystem.Security.Request.RegisterRequest;
@@ -32,13 +31,10 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @Autowired
-    private RefreshTokenServiceImpl refreshTokenService;
-
-
     @Override
     public String registerUser(RegisterRequest dto) {
-        if (userRepository.existsByEmail(dto.getEmail())) {
+        // ✅ Correct Optional handling
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists");
         }
 
@@ -49,16 +45,14 @@ public class AuthServiceImpl implements AuthService {
 
         String role = dto.getRole();
         if ("ADMIN".equalsIgnoreCase(role)) {
-            user.setRole("ADMIN");
+            user.setRole("ROLE_ADMIN"); // ✅ better to prefix with ROLE_
         } else {
-            user.setRole("USER");
+            user.setRole("ROLE_USER");
         }
 
         userRepository.save(user);
         return "User registered successfully!";
     }
-
-
 
     @Override
     public ResponseEntity<?> loginUser(LoginRequest dto) {
@@ -82,8 +76,9 @@ public class AuthServiceImpl implements AuthService {
                 token,
                 user.getName(),
                 userDetails.getAuthorities()
-                        .stream().map(item -> item.getAuthority()).toList()
+                        .stream()
+                        .map(item -> item.getAuthority())
+                        .toList()
         ));
     }
-
 }

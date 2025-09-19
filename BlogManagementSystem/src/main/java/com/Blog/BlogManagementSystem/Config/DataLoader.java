@@ -18,14 +18,17 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (!userRepository.existsByEmail("admin@blog.com")) {
+        // ✅ Check if admin already exists using Optional
+        if (userRepository.findByEmail("admin@blog.com").isEmpty()) {
             User admin = new User();
             admin.setName("Admin");
             admin.setEmail("admin@blog.com");
             admin.setPassword(passwordEncoder.encode("admin123"));
-            admin.setRole("ADMIN");
+            admin.setRole("ROLE_ADMIN"); // better for Spring Security
             userRepository.save(admin);
-            System.out.println("Admin user created.");
+            System.out.println("✅ Admin user created.");
+        } else {
+            System.out.println("ℹ️ Admin user already exists.");
         }
     }
 }

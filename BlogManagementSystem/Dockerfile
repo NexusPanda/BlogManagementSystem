@@ -1,28 +1,34 @@
-# ------------ Stage 1: Build the JAR using Maven + Java 17 ------------
-FROM maven:3.9.4-eclipse-temurin-17 AS build
+# ------------ Step 1: Build stage ------------
+FROM maven:3.9.9-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-# Copy pom.xml and download dependencies (use cache)
+# Install CA certificates (fix PKIX path building errors)
+RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
+
+# Copy pom.xml first and download dependencies (cache friendly)
 COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN mvn dependency:go-offline -B
 
-# Now copy the rest of the project
-COPY . .
-
-# Build the Spring Boot application (Blog Management)
+# Copy source and build
+COPY src ./src
 RUN mvn clean package -DskipTests
 
-# ------------ Stage 2: Run the JAR using JDK 17 runtime ------------
-FROM eclipse-temurin:17-jdk
+# ------------ Step 2: Run stage ------------
+FROM eclipse-temurin:17-jdk-jammy
 
 WORKDIR /app
 
-# Copy built JAR file from previous stage
-COPY --from=build /app/target/blog-management-0.0.1-SNAPSHOT.jar app.jar
+# Copy JAR from build stage
+COPY --from=build /app/target/*.jar app.jar
 
-# Expose port (adjust if you use a different one in application.properties)
-EXPOSE 8080
+# Install curl + PostgreSQL client (for wait-for-db.sh)
+RUN apt-get update && apt-get install -y curl postgresql-client && rm -rf /var/lib/apt/lists/*
 
-# Run the Spring Boot Blog Management app
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Add wait-for-db script
+COPY wait-for-db.sh /usr/local/bin/wait-for-db.sh
+RUN chmod +x /usr/local/bin/wait-for-db.sh
+
+EXPOSE 4343
+
+ENTRYPOINT ["wait-for-db.sh", "db", "5432", "--", "java", "-jar", "app.jar"]

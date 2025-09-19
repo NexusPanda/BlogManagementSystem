@@ -1,0 +1,27 @@
+# Ignore Maven target folder (built JARs)
+target/
+
+# Ignore local IDE files
+*.iml
+.idea/
+*.ipr
+*.iws
+.vscode/
+
+# Git files
+.git
+.gitignore
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node modules (if you have frontend code)
+node_modules/
+
+# Docker files (optional to ignore if not needed inside build)
+Dockerfile
+docker-compose.yml
