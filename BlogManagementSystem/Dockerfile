@@ -3,7 +3,7 @@ FROM maven:3.9.9-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-# Install CA certificates (fix PKIX path building errors)
+# Install CA certificates (fix PKIX path errors)
 RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
 
 # Copy pom.xml first and download dependencies (cache friendly)
@@ -29,6 +29,8 @@ RUN apt-get update && apt-get install -y curl postgresql-client && rm -rf /var/l
 COPY wait-for-db.sh /usr/local/bin/wait-for-db.sh
 RUN chmod +x /usr/local/bin/wait-for-db.sh
 
+# Expose the local port (Render ignores this but keep consistent)
 EXPOSE 4343
 
-ENTRYPOINT ["wait-for-db.sh", "db", "5432", "--", "java", "-jar", "app.jar"]
+# ENTRYPOINT → wait for Render Postgres, then start app
+ENTRYPOINT ["wait-for-db.sh", "dpg-d36dboffte5s73bc38h0-a.oregon-postgres.render.com", "5432", "--", "java", "-jar", "app.jar"]
