@@ -9,3 +9,9 @@ BlogManagementSystem/target/
 
 # Ignore sensitive configs
 BlogManagementSystem/src/main/resources/application.properties
+
+# Docker file
+BlogManagementSystem/Dockerfile
+BlogManagementSystem/render.yaml
+BlogManagementSystem/docker-compose.yml
+BlogManagementSystem/wait-for-db.sh
