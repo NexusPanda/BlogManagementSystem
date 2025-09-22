@@ -14,6 +14,7 @@ public class DatabaseKeepAlive {
     }
 
     // Run every 5 minutes (300000 ms)
+    // This will keep the DB up and running and solve the free tier problem in Render for Postgres Service
     @Scheduled(fixedRate = 300000)
     public void keepAlive() {
         try {
