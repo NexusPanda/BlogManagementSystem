@@ -74,7 +74,7 @@ public class AuthServiceImpl implements AuthService {
 
         return ResponseEntity.ok(new LoginResponse(
                 token,
-                user.getName(),
+                user.getEmail(),
                 userDetails.getAuthorities()
                         .stream()
                         .map(item -> item.getAuthority())
