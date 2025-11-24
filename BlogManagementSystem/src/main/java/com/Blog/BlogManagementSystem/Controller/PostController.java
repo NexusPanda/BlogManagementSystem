@@ -18,13 +18,13 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin/posts")
     public ResponseEntity<PostResponse> viewPost() {
         return new ResponseEntity<>(postService.viewPost(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/public/author")
     public ResponseEntity<PostDTO> addPost(@AuthenticationPrincipal UserDetails userDetails,
                                            @RequestBody PostDTO postDTO) {

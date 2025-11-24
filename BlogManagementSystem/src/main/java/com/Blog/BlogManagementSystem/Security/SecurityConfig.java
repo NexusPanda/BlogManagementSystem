@@ -18,7 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.context.NullSecurityContextRepository;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 
 @Configuration
@@ -47,18 +46,15 @@ public class SecurityConfig {
                         exception.authenticationEntryPoint(authEntryPointJwt))
                 .headers(headers ->
                         headers.frameOptions(frames ->
-                        frames.sameOrigin()))
+                                frames.sameOrigin()))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/public/**").hasAuthority("USER")
-                .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
-                .requestMatchers("/api/users/**").hasAuthority("USER")
-                .anyRequest().authenticated());
-
-        http.securityContext(securityContext ->
-                securityContext.securityContextRepository(new NullSecurityContextRepository())
-        );
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**").hasRole("USER")
+                        .requestMatchers("/api/users/**").permitAll()
+                        .anyRequest().authenticated());
 
         http.addFilterBefore(authTokenFilter(),
                 UsernamePasswordAuthenticationFilter.class);

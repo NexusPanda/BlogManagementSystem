@@ -17,19 +17,19 @@ public class TagController {
     @Autowired
     private TagService tagService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/tags")
     public ResponseEntity<TagDTO> addTag(@RequestBody TagDTO tagDTO) {
         return new ResponseEntity<>(tagService.addTag(tagDTO), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/admin/tags/{id}")
     public ResponseEntity<TagDTO> updateTag(@PathVariable Long id, @RequestBody TagDTO tagDTO) {
         return new ResponseEntity<>(tagService.updateTag(id, tagDTO), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/admin/tags/{id}")
     public ResponseEntity<String> deleteTag(@PathVariable Long id) {
         tagService.deleteTag(id);
