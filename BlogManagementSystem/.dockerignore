@@ -1,5 +1,3 @@
-# Ignore Maven target folder (built JARs)
-target/
 
 # Ignore local IDE files
 *.iml
