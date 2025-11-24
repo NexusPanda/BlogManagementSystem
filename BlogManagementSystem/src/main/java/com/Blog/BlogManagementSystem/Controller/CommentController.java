@@ -23,20 +23,20 @@ public class CommentController {
         return new ResponseEntity<>(commentService.viewComments(postId), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/public/posts/{postId}/comments")
     public ResponseEntity<CommentDTO> addComments(@PathVariable Long postId,
                                                   @RequestBody CommentDTO commentDTO) {
         return new ResponseEntity<>(commentService.addComments(postId, commentDTO), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PatchMapping("/admin/comments/{id}/approve")
     public ResponseEntity<CommentDTO> approveComment(@PathVariable Long id) {
         return new ResponseEntity<>(commentService.approveComment(id), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/admin/comments/{id}")
     public ResponseEntity<CommentDTO> deleteComment(@PathVariable Long id) {
         return new ResponseEntity<>(commentService.deleteComment(id), HttpStatus.OK);
