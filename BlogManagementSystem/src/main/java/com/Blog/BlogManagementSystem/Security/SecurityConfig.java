@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.NullSecurityContextRepository;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 
 @Configuration
@@ -50,11 +51,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/api/public/**").hasRole("USER")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/admin/**").hasRole("USER")
-                .requestMatchers("/api/users/**").permitAll()
+                .requestMatchers("/api/users/**").hasRole("USER")
                 .anyRequest().authenticated());
+
+        http.securityContext(securityContext ->
+                securityContext.securityContextRepository(new NullSecurityContextRepository())
+        );
 
         http.addFilterBefore(authTokenFilter(),
                 UsernamePasswordAuthenticationFilter.class);
